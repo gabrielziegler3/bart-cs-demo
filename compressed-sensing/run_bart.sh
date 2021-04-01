@@ -1,7 +1,8 @@
 #!/bin/bash
 
-export TOOLBOX_PATH=/usr/local/bin
-export PYTHONPATH=${TOOLBOX_PATH}/python:${PYTHONPATH}
+TOOLBOX_PATH="/bart_demo"
+#PYTHONPATH=
+PYTHONPATH=${TOOLBOX_PATH}/python:${PYTHONPATH}
 
 echo $TOOLBOX_PATH
 echo $PYTHONPATH

@@ -4,9 +4,9 @@ FROM ubuntu:18.04
 USER root
 
 # Define working directory.
-WORKDIR /bart
+WORKDIR /bart_demo
 
-COPY . /bart
+COPY . /bart_demo
 
 RUN apt-get update && apt-get -y install make python3.8 git gcc libfftw3-dev \
         liblapacke-dev libpng-dev python3-distutils \
@@ -19,14 +19,15 @@ RUN python3.8 get-pip.py
 RUN pip install -r requirements.txt
 
 # Install FastMRI
-RUN git clone https://github.com/facebookresearch/fastMRI.git
+RUN if cd fastMRI; then git pull; else git clone https://github.com/facebookresearch/fastMRI.git; fi
 RUN cd fastMRI && pip install -e . && cd ~
 
-# Install BART 
-RUN wget https://github.com/mrirecon/bart/archive/refs/tags/v0.7.00.tar.gz
+# Install BART
+RUN wget -nc https://github.com/mrirecon/bart/archive/refs/tags/v0.7.00.tar.gz
 RUN tar xzf v0.7.00.tar.gz
 RUN cd bart-0.7.00 && make && make install && cd ~
 
-ENV TOOLBOX_PATH=$(which bart)
+# Point TOOLBOX to path where
+ENV TOOLBOX_PATH="/bart_demo"
 ENV PATH=$TOOLBOX_PATH:$PATH
 ENV PYTHONPATH="${TOOLBOX_PATH}/python:$PYTHONPATH"
